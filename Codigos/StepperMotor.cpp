@@ -1,0 +1,29 @@
+#include <Stepper.h>
+
+// Número de passos para uma volta completa do 28BYJ-48
+const int STEPS_PER_REV = 2048;
+
+// Pino do potenciômetro
+const int SPEED_CONTROL = A0;
+
+// Pinos conectados à plaquinha ULN2003 (IN1 → IN4)
+Stepper stepper_28BYJ48(STEPS_PER_REV, 8, 10, 9, 11);
+
+void setup() {
+  // nada a fazer
+}
+
+void loop() {
+  // Lê o valor do potenciômetro
+  int sensorReading = analogRead(SPEED_CONTROL);
+
+  // Mapeia para velocidade maior (de 0 até 500 RPM)
+  int motorSpeed = map(sensorReading, 0, 1023, 0, 500);
+
+  // Define a velocidade
+  if (motorSpeed > 0) {
+    stepper_28BYJ48.setSpeed(motorSpeed);
+    // Gira continuamente
+    stepper_28BYJ48.step(STEPS_PER_REV / 10);
+  }
+}
